@@ -1,4 +1,5 @@
 ﻿using MerchantGuideGalaxy.Constants;
+using MerchantGuideGalaxy.Exception;
 using MerchantGuideGalaxy.Model;
 using MerchantGuideGalaxy.Service.Interface;
 using Microsoft.Extensions.Configuration;
@@ -24,9 +25,20 @@ namespace MerchantGuideGalaxy.Service
         }
         public string Execute(string text)
         {
-            LoadText(text);
-            //int valor = text.ConvertRomanNumeralsToInt(_configuration["RomanConfig:RomanRegex"]);
-            return _compilerService.ExecuteQuery(_listKeywords);
+            try
+            {
+                LoadText(text);
+                //int valor = text.ConvertRomanNumeralsToInt(_configuration["RomanConfig:RomanRegex"]);
+                return _compilerService.ExecuteQuery(_listKeywords);
+            }
+            catch (TypeExecutionException)
+            {
+                return "I have no idea what you are talking about";
+            }
+            catch (System.Exception)
+            {
+                return "Unexpected error";
+            }
         }
 
         private void LoadText(string text)
@@ -81,7 +93,7 @@ namespace MerchantGuideGalaxy.Service
                        ? null
                        : _keywords[_currentPosition + 1];
 
-            if (!(previous == Verification.Many || previous == Verification.Much) 
+            if (!(previous == Verification.Many || previous == Verification.Much)
                 && next == Operators.Is)
             {
                 return new Keyword(value, TypeKeyword.Classifier);
