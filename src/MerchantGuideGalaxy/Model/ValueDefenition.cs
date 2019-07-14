@@ -14,7 +14,7 @@ namespace MerchantGuideGalaxy.Model
             Type = type;
         }
 
-        public ValueDefenition(string typeName, int value, TypeKeyword type)
+        public ValueDefenition(string typeName, double value, TypeKeyword type)
         {
             TypeName = typeName;
             Value = value;
@@ -24,6 +24,6 @@ namespace MerchantGuideGalaxy.Model
         public TypeKeyword Type { get; set; }
         public string TypeName { get; set; }
         public string RomanValue { get; set; }
-        public int? Value { get; set; }
+        public double? Value { get; set; }
     }
 }

@@ -12,6 +12,6 @@ namespace MerchantGuideGalaxy.Model
             Number = Convert.ToInt32(name);
         }
 
-        public int Number { get; set; }
+        public double Number { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MerchantGuideGalaxy.Exception;
+﻿using MerchantGuideGalaxy.Constants;
+using MerchantGuideGalaxy.Exception;
 using MerchantGuideGalaxy.Extensions;
 using MerchantGuideGalaxy.Model;
 using MerchantGuideGalaxy.Service.Interface;
@@ -90,7 +91,7 @@ namespace MerchantGuideGalaxy.Service
             var classifier = listKeywords.FirstOrDefault(x => x.Type == TypeKeyword.Classifier);
             var value = listKeywords.FirstOrDefault(x => x.Type == TypeKeyword.Value) as ValueKeyword;
 
-            int calc = CalculateValue(constants, value.Number);
+            double convertedValue = value.Number / CalculateValue(constants);
 
             var exists = (from item in _classifiersDefinitios
                           where item.Type == TypeKeyword.Classifier
@@ -101,7 +102,7 @@ namespace MerchantGuideGalaxy.Service
                 return "Item already been registered!";
             }
             _classifiersDefinitios.Add(new ValueDefenition(classifier.Name,
-                                                         calc,
+                                                         convertedValue,
                                                          TypeKeyword.Classifier));
 
             return "Declaration Registred.";
@@ -109,19 +110,30 @@ namespace MerchantGuideGalaxy.Service
 
         private string ExecuteResultQuery(IList<Keyword> listKeywords)
         {
-            throw new NotImplementedException();
+            var verifications = listKeywords.Where(x => x.Type == TypeKeyword.Verification).ToList();
+            var constants = listKeywords.Where(x => x.Type == TypeKeyword.Constant).ToList();
+            var calculateValue = CalculateValue(constants);
+            var constantsName = string.Join(" ",constants.Select(c => c.Name.ToString()));
+            var classifier = listKeywords.FirstOrDefault(x => x.Type == TypeKeyword.Classifier);
+            var intergalacticUnit = listKeywords.FirstOrDefault(x => x.Type == TypeKeyword.IntergalacticUnit);
+
+            if (verifications.Any(x => x.Name.Equals(Verification.Much)))
+            {
+                return string.Format("{0} is {1}", constantsName, calculateValue);
+            }
+
+            calculateValue *= _classifiersDefinitios.FirstOrDefault(x => x.TypeName.Equals(classifier.Name)).Value ?? 1;
+
+            return string.Format("{0} {1} is {2} {3}", constantsName, classifier.Name, calculateValue, intergalacticUnit.Name);
         }
 
-        private int CalculateValue(IList<Keyword> constants, int value)
+        private double CalculateValue(IList<Keyword> constants)
         {
             var roman = new StringBuilder();
-
             constants.Select(x => _constantsDefinitios.FirstOrDefault(y => y.TypeName.Equals(x.Name)).RomanValue)
                 .ToList()
                 .ForEach(item => roman.Append(item));
-
-
-            return value / roman.ToString().ConvertRomanNumeralsToInt(_configuration["RomanConfig:RomanRegex"]);
+            return roman.ToString().ConvertRomanNumeralsToInt(_configuration["RomanConfig:RomanRegex"]);
         }
     }
 }
