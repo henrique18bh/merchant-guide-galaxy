@@ -1,10 +1,12 @@
 ﻿using MerchantGuideGalaxy.Exception;
+using MerchantGuideGalaxy.Extensions;
 using MerchantGuideGalaxy.Model;
 using MerchantGuideGalaxy.Service.Interface;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace MerchantGuideGalaxy.Service
 {
@@ -84,12 +86,42 @@ namespace MerchantGuideGalaxy.Service
 
         private string ExecuteIntergalacticDefinitionQuery(IList<Keyword> listKeywords)
         {
-            throw new NotImplementedException();
+            var constants = listKeywords.Where(x => x.Type == TypeKeyword.Constant).ToList();
+            var classifier = listKeywords.FirstOrDefault(x => x.Type == TypeKeyword.Classifier);
+            var value = listKeywords.FirstOrDefault(x => x.Type == TypeKeyword.Value) as ValueKeyword;
+
+            int calc = CalculateValue(constants, value.Number);
+
+            var exists = (from item in _classifiersDefinitios
+                          where item.Type == TypeKeyword.Classifier
+                              && item.TypeName.Equals(classifier.Name)
+                          select item).Any();
+            if (exists)
+            {
+                return "Item already been registered!";
+            }
+            _classifiersDefinitios.Add(new ValueDefenition(classifier.Name,
+                                                         calc,
+                                                         TypeKeyword.Classifier));
+
+            return "Declaration Registred.";
         }
 
         private string ExecuteResultQuery(IList<Keyword> listKeywords)
         {
             throw new NotImplementedException();
+        }
+
+        private int CalculateValue(IList<Keyword> constants, int value)
+        {
+            var roman = new StringBuilder();
+
+            constants.Select(x => _constantsDefinitios.FirstOrDefault(y => y.TypeName.Equals(x.Name)).RomanValue)
+                .ToList()
+                .ForEach(item => roman.Append(item));
+
+
+            return value / roman.ToString().ConvertRomanNumeralsToInt(_configuration["RomanConfig:RomanRegex"]);
         }
     }
 }

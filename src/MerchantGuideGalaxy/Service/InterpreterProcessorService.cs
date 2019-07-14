@@ -72,9 +72,9 @@ namespace MerchantGuideGalaxy.Service
                 case Verification.Much:
                     return new Keyword(value, TypeKeyword.Verification);
             }
-            if (double.TryParse(value, out double testValue))
+            if (int.TryParse(value, out int testValue))
             {
-                return new Keyword(value, TypeKeyword.Value);
+                return new ValueKeyword(value, TypeKeyword.Value);
             }
             if (value == _keywords.First())
             {
