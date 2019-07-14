@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MerchantGuideGalaxy": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "local"
+      }
+    }
+  }
+}
