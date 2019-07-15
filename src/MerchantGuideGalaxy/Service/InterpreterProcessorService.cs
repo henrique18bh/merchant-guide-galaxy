@@ -70,10 +70,10 @@ namespace MerchantGuideGalaxy.Service
             {
                 return new Keyword(value, TypeKeyword.Constant);
             }
-            return ValidateClassifier(value);
+            return ValidateConstantClassifier(value);
         }
 
-        private Keyword ValidateClassifier(string value)
+        private Keyword ValidateConstantClassifier(string value)
         {
             string previous = _currentPosition == 0
                            ? null
