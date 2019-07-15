@@ -4,7 +4,6 @@ using MerchantGuideGalaxy.Extensions;
 using MerchantGuideGalaxy.Model;
 using MerchantGuideGalaxy.Service.Interface;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +12,8 @@ namespace MerchantGuideGalaxy.Service
 {
     public class CompilerService : ICompilerService
     {
-        private IList<ValueDefenition> _constantsDefinitios;
-        private IList<ValueDefenition> _classifiersDefinitios;
+        private readonly IList<ValueDefenition> _constantsDefinitios;
+        private readonly IList<ValueDefenition> _classifiersDefinitios;
         private readonly IConfiguration _configuration;
 
         public CompilerService(IConfiguration configuration)
@@ -76,12 +75,12 @@ namespace MerchantGuideGalaxy.Service
                           select item).Any();
             if (exists)
             {
-                return "Item already been registered!";
+                return "Item already been processed!";
             }
             _constantsDefinitios.Add(new ValueDefenition(listKeywords.FirstOrDefault().Name, 
                                                          listKeywords.LastOrDefault().Name, 
                                                          TypeKeyword.Constant));
-            return "Declaration Registred.";
+            return "Information processed!";
 
         }
 
@@ -99,13 +98,13 @@ namespace MerchantGuideGalaxy.Service
                           select item).Any();
             if (exists)
             {
-                return "Item already been registered!";
+                return "Item already been processed!";
             }
             _classifiersDefinitios.Add(new ValueDefenition(classifier.Name,
                                                          convertedValue,
                                                          TypeKeyword.Classifier));
 
-            return "Declaration Registred.";
+            return "Information processed!";
         }
 
         private string ExecuteResultQuery(IList<Keyword> listKeywords)
@@ -119,12 +118,12 @@ namespace MerchantGuideGalaxy.Service
 
             if (verifications.Any(x => x.Name.Equals(Verification.Much)))
             {
-                return string.Format("{0} is {1}", constantsName, calculateValue);
+                return $"{constantsName} is {calculateValue}";
             }
 
             calculateValue *= _classifiersDefinitios.FirstOrDefault(x => x.TypeName.Equals(classifier.Name)).Value ?? 1;
 
-            return string.Format("{0} {1} is {2} {3}", constantsName, classifier.Name, calculateValue, intergalacticUnit.Name);
+            return $"{constantsName} {classifier.Name} is {calculateValue} {intergalacticUnit.Name}";
         }
 
         private double CalculateValue(IList<Keyword> constants)

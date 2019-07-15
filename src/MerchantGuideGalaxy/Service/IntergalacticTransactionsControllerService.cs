@@ -13,17 +13,19 @@ namespace MerchantGuideGalaxy.Service
         }
         public void StartProcess()
         {
+            Console.WriteLine($"Hello, how can I help you?");
+            Console.WriteLine($@"Enter ""exit"" to close the program. {Environment.NewLine}");
             while (true)
             {
-                Console.Write($"Hello Galaxy Merchant, how can I help you? {Environment.NewLine}");
-                var text = Console.ReadLine();
+                Console.Write($"Enter values to be computed: ");
+                string text = Console.ReadLine();
 
-                if (text == "exit")
+                if (text.ToLower() == "exit")
                 {
                     break;
                 }
 
-                var result = _interpreterProcessorService.Execute(text);
+                string result = _interpreterProcessorService.Execute(text);
                 Console.WriteLine(result);
             }
         }
