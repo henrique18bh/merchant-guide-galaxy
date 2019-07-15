@@ -1,5 +1,5 @@
 # Executing program with Docker:
-| docker run -it henrique18bh/merchant-guide-galaxy
+- docker run -it henrique18bh/merchant-guide-galaxy
 
 
 # Problem Three: Merchant's Guide to the Galaxy
