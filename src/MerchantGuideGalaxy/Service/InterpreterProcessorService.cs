@@ -9,13 +9,13 @@ namespace MerchantGuideGalaxy.Service
     public class InterpreterProcessorService : IInterpreterProcessorService
     {
         private readonly ICompilerService _compilerService;
-        private IList<Keyword> _listKeywords;
+        public IList<Keyword> ListKeywords { get; private set; }
         private string[] _keywords;
         private int _currentPosition;
 
         public InterpreterProcessorService(ICompilerService compilerService)
         {
-            _listKeywords = new List<Keyword>();
+            ListKeywords = new List<Keyword>();
             _compilerService = compilerService;
         }
         public string Execute(string text)
@@ -23,7 +23,7 @@ namespace MerchantGuideGalaxy.Service
             try
             {
                 LoadText(text);
-                return _compilerService.ExecuteQuery(_listKeywords);
+                return _compilerService.ExecuteQuery(ListKeywords);
             }
             catch (System.Exception)
             {
@@ -31,11 +31,11 @@ namespace MerchantGuideGalaxy.Service
             }
         }
 
-        private void LoadText(string text)
+        public void LoadText(string text)
         {
             _currentPosition = -1;
             _keywords = text.Split(' ');
-            _listKeywords = _keywords.Select(GetKeyword).ToList();
+            ListKeywords = _keywords.Select(GetKeyword).ToList();
         }
 
         private Keyword GetKeyword(string value)
