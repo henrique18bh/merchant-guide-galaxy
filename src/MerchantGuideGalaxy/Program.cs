@@ -1,5 +1,4 @@
-﻿using System;
-using MerchantGuideGalaxy.DI;
+﻿using MerchantGuideGalaxy.DI;
 using MerchantGuideGalaxy.Service.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,7 +1,6 @@
 ﻿using MerchantGuideGalaxy.Constants;
 using MerchantGuideGalaxy.Model;
 using MerchantGuideGalaxy.Service.Interface;
-using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,16 +8,13 @@ namespace MerchantGuideGalaxy.Service
 {
     public class InterpreterProcessorService : IInterpreterProcessorService
     {
-        private readonly IConfiguration _configuration;
         private readonly ICompilerService _compilerService;
         private IList<Keyword> _listKeywords;
         private string[] _keywords;
         private int _currentPosition;
 
-        public InterpreterProcessorService(IConfiguration configuration,
-                                           ICompilerService compilerService)
+        public InterpreterProcessorService(ICompilerService compilerService)
         {
-            _configuration = configuration;
             _listKeywords = new List<Keyword>();
             _compilerService = compilerService;
         }

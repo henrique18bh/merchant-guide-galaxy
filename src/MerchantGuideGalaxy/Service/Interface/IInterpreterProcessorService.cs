@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MerchantGuideGalaxy.Service.Interface
+﻿namespace MerchantGuideGalaxy.Service.Interface
 {
     public interface IInterpreterProcessorService
     {
